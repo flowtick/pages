@@ -14,8 +14,8 @@ class DomView[E](mount: E => Unit) extends View[E] {
       component.init()
     }
 
-    dom.window.addEventListener[HashChangeEvent]("hashchange", (_) => renderCurrent())
-    dom.window.addEventListener[Event]("load", (_) => renderCurrent())
+    dom.window.addEventListener[HashChangeEvent]("hashchange", (_: HashChangeEvent) => renderCurrent())
+    dom.window.addEventListener[Event]("load", (_: Event) => renderCurrent())
   }
 
   override def goto(path: String): Unit = dom.window.location.hash = path
