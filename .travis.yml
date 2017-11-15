@@ -1,7 +1,7 @@
 language: scala
 
 script:
-  - sbt clean coverage test
+  - sbt clean coverage pagesJVM/test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
