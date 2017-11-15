@@ -4,6 +4,9 @@ import org.scalajs.dom
 import org.scalajs.dom.{ Event, HashChangeEvent }
 import pages.Page.{ Routing, View }
 
+import scala.scalajs.js.annotation.JSExportAll
+
+@JSExportAll
 class DomView[E](mount: E => Unit) extends View[E] {
   override def path: String = dom.window.location.hash.replaceFirst("#", "")
 
