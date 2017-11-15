@@ -1,7 +1,7 @@
 package pages
 
 import org.scalatest.{ FlatSpec, Matchers }
-import pages.Page.Component
+import pages.Page.{ Component, RouteContext }
 
 class PageSpec extends FlatSpec with Matchers {
   case class TestComponent(element: String = "Test Component") extends Component[String]
@@ -34,5 +34,23 @@ class PageSpec extends FlatSpec with Matchers {
     }
   }
 
-  it should "get RouteContext"
+  it should "get RouteContext from path and template" in {
+    RouteContext.from(template = "/:foo/:bar")(path = "/1/2").pathParams should be(Map("foo" -> "1", "bar" -> "2"))
+    RouteContext.from(template = "/:foo/:bar")(path = "/1").pathParams should be(Map("foo" -> "1"))
+    RouteContext.from(template = "/:foo/:bar/:baz")(path = "/1").pathParams should be(Map("foo" -> "1"))
+    RouteContext.from(template = "/:foo")(path = "/1/2").pathParams should be(Map("foo" -> "1"))
+  }
+
+  it should "match path and template" in {
+    Page.matches(path = "", template = "") should be(true)
+    Page.matches(path = "/", template = "/") should be(true)
+    Page.matches(path = "/foo", template = "/foo") should be(true)
+    Page.matches(path = "/foo", template = "/:too") should be(true)
+    Page.matches(path = "/foo/bar", template = "/:too/:tar") should be(true)
+
+    Page.matches(path = "/", template = "") should be(false)
+    Page.matches(path = "/foo", template = "/tar") should be(false)
+    Page.matches(path = "/foo/bar", template = "/:too") should be(false)
+    Page.matches(path = "/foo/bar", template = "/:too/:tar/:taz") should be(false)
+  }
 }
