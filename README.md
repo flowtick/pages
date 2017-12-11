@@ -15,6 +15,11 @@ Build
 
     sbt package
 
+Release
+=======
+
+    sbt release
+
 License
 =======
 
