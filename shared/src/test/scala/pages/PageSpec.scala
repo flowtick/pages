@@ -35,10 +35,18 @@ class PageSpec extends FlatSpec with Matchers {
   }
 
   it should "get RouteContext from path and template" in {
-    RouteContext.from(template = "/:foo/:bar")(path = "/1/2").pathParams should be(Map("foo" -> "1", "bar" -> "2"))
-    RouteContext.from(template = "/:foo/:bar")(path = "/1").pathParams should be(Map("foo" -> "1"))
-    RouteContext.from(template = "/:foo/:bar/:baz")(path = "/1").pathParams should be(Map("foo" -> "1"))
-    RouteContext.from(template = "/:foo")(path = "/1/2").pathParams should be(Map("foo" -> "1"))
+    RouteContext.from(path = "/1/2")(template = Some("/:foo/:bar")).pathParams should be(Map("foo" -> "1", "bar" -> "2"))
+    RouteContext.from(path = "/1")(template = Some("/:foo/:bar")).pathParams should be(Map("foo" -> "1"))
+    RouteContext.from(path = "/1")(template = Some("/:foo/:bar/:baz")).pathParams should be(Map("foo" -> "1"))
+    RouteContext.from(path = "/1/2")(template = Some("/:foo")).pathParams should be(Map("foo" -> "1"))
+  }
+
+  it should "get RouteContext with query parameters from path" in {
+    RouteContext.from(path = "/1/2")(None).pathParams should be(Map.empty)
+    RouteContext.from(path = "/1/2")(None).queryParams should be(Map.empty)
+    RouteContext.from(path = "/1/2?param1=foo")(None).queryParams should be(Map("param1" -> "foo"))
+    RouteContext.from(path = "/1/2?param1=")(None).queryParams should be(Map.empty)
+    RouteContext.from(path = "/1/2?param1=foo&param2=bar")(None).queryParams should be(Map("param1" -> "foo", "param2" -> "bar"))
   }
 
   it should "match path and template" in {
