@@ -51,10 +51,15 @@ object Page {
   }
 
   def matches(path: String, template: String): Boolean = {
+    if (path == "/" && template != "/" || path == "" && template != "") false
+    else matchFragments(path, template)
+  }
+
+  def matchFragments(path: String, template: String): Boolean = {
     val pathSplit = path.split("/")
     val templateSplit = template.split("/")
 
-    val zippedPartMatchCount = path.split("/").zipAll(templateSplit, ".", ".").count {
+    def zippedPartMatchCount = pathSplit.zipAll(templateSplit, ".", ".").count {
       case (pathPart, templatePart) if pathPart == templatePart || templatePart.startsWith(":") => true
       case _ => false
     }

@@ -56,7 +56,10 @@ class PageSpec extends FlatSpec with Matchers {
     Page.matches(path = "/foo", template = "/:too") should be(true)
     Page.matches(path = "/foo/bar", template = "/:too/:tar") should be(true)
 
+    Page.matches(path = "", template = "/") should be(false)
     Page.matches(path = "/", template = "") should be(false)
+    Page.matches(path = "/foo", template = "/") should be(false)
+    Page.matches(path = "/", template = "/foo") should be(false)
     Page.matches(path = "/foo", template = "/tar") should be(false)
     Page.matches(path = "/foo/bar", template = "/:too") should be(false)
     Page.matches(path = "/foo/bar", template = "/:too/:tar/:taz") should be(false)
