@@ -18,6 +18,7 @@ Build
 Release
 =======
 
+    sbt +compile
     sbt release
 
 License
