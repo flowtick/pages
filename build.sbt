@@ -62,7 +62,10 @@ lazy val pages = crossProject.in(file(".")).
   )
 
 lazy val pagesJS = pages.js.settings(
+  resolvers += Resolver.bintrayRepo("flowtick", "scala-xml"),
   libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.3" % Provided,
+  libraryDependencies += "com.flowtick" %%% "scala-xml" % "1.1.0-ft" % Provided,
+  libraryDependencies += "in.nvilla" %%% "monadic-html" % "0.3.2" % Test,
   artifactPath in (Compile, fastOptJS) := baseDirectory.value / ".." / "dist" / "pages.js",
   artifactPath in (Compile, fullOptJS) := (artifactPath in (Compile, fastOptJS)).value
 )
