@@ -56,7 +56,9 @@ object Page {
   }
 
   def matchFragments(path: String, template: String): Boolean = {
-    val pathSplit = path.split("/")
+    val queryIndex = path.indexOf("?")
+    val noQueryPath = if (queryIndex == -1) path else path.substring(0, queryIndex)
+    val pathSplit = noQueryPath.split("/")
     val templateSplit = template.split("/")
 
     def zippedPartMatchCount = pathSplit.zipAll(templateSplit, ".", ".").count {
@@ -64,7 +66,7 @@ object Page {
       case _ => false
     }
 
-    path == template || path.nonEmpty && template.nonEmpty && pathSplit.length == zippedPartMatchCount
+    noQueryPath == template || noQueryPath.nonEmpty && template.nonEmpty && pathSplit.length == zippedPartMatchCount
   }
 
   def page[E]: (String, RouteResolver[E]) => Routing[E] = apply

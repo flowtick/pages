@@ -64,4 +64,9 @@ class PageSpec extends FlatSpec with Matchers {
     Page.matches(path = "/foo/bar", template = "/:too") should be(false)
     Page.matches(path = "/foo/bar", template = "/:too/:tar/:taz") should be(false)
   }
+
+  it should "match path and template with query params" in {
+    Page.matches(path = "/foo?bar=baz", template = "/foo") should be(true)
+    Page.matches(path = "?", template = "") should be(true)
+  }
 }
