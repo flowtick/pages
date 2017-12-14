@@ -48,7 +48,7 @@ lazy val common = Seq(
 
 lazy val root = project.in(file(".")).
   settings(common).
-  aggregate(pagesJS).
+  aggregate(pagesJS, pagesJVM).
   settings(
     publish := {},
     publishLocal := {},
