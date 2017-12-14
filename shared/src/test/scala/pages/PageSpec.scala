@@ -45,6 +45,11 @@ class PageSpec extends FlatSpec with Matchers {
     RouteContext.from(path = "/1/2")(None).pathParams should be(Map.empty)
     RouteContext.from(path = "/1/2")(None).queryParams should be(Map.empty)
     RouteContext.from(path = "/1/2?param1=foo")(None).queryParams should be(Map("param1" -> "foo"))
+    RouteContext.from(path = "/1/2?param1=foo")(Some("/1/:p")) should be(
+      RouteContext(
+        path = "/1/2?param1=foo",
+        pathParams = Map("p" -> "2"),
+        queryParams = Map("param1" -> "foo")))
     RouteContext.from(path = "/1/2?param1=")(None).queryParams should be(Map.empty)
     RouteContext.from(path = "/1/2?param1=foo&param2=bar")(None).queryParams should be(Map("param1" -> "foo", "param2" -> "bar"))
   }

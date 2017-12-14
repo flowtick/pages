@@ -25,7 +25,7 @@ object Page {
       val pathParams = template.map(
         _.split("/")
           .zip(path.split("/")).flatMap {
-            case (param, value) if param.startsWith(":") => Some(param.drop(1) -> value)
+            case (param, value) if param.startsWith(":") => Some(param.drop(1) -> pathPart(value))
             case _ => None
           }.toMap)
 
@@ -55,10 +55,14 @@ object Page {
     else matchFragments(path, template)
   }
 
-  def matchFragments(path: String, template: String): Boolean = {
-    val queryIndex = path.indexOf("?")
-    val noQueryPath = if (queryIndex == -1) path else path.substring(0, queryIndex)
-    val pathSplit = noQueryPath.split("/")
+  def pathPart(fullPath: String): String = {
+    val queryIndex = fullPath.indexOf("?")
+    if (queryIndex == -1) fullPath else fullPath.substring(0, queryIndex)
+  }
+
+  def matchFragments(fullPath: String, template: String): Boolean = {
+    val pathOnly = pathPart(fullPath)
+    val pathSplit = pathOnly.split("/")
     val templateSplit = template.split("/")
 
     def zippedPartMatchCount = pathSplit.zipAll(templateSplit, ".", ".").count {
@@ -66,7 +70,7 @@ object Page {
       case _ => false
     }
 
-    noQueryPath == template || noQueryPath.nonEmpty && template.nonEmpty && pathSplit.length == zippedPartMatchCount
+    pathOnly == template || pathOnly.nonEmpty && template.nonEmpty && pathSplit.length == zippedPartMatchCount
   }
 
   def page[E]: (String, RouteResolver[E]) => Routing[E] = apply
