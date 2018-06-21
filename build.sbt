@@ -10,6 +10,12 @@ lazy val common = Seq(
   organization := "com.flowtick",
   scalaVersion := scalaV,
   crossScalaVersions := Seq(scalaV, "2.11.11"),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
+  com.typesafe.sbt.pgp.PgpKeys.publishSignedConfiguration := com.typesafe.sbt.pgp.PgpKeys.publishSignedConfiguration.value
+    .withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+  com.typesafe.sbt.pgp.PgpKeys.publishLocalSignedConfiguration := com.typesafe.sbt.pgp.PgpKeys.publishLocalSignedConfiguration.value
+    .withOverwrite(true),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseCrossBuild := true,
   releaseProcess := Seq[ReleaseStep](
