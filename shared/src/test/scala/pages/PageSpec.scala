@@ -1,7 +1,7 @@
 package pages
 
 import org.scalatest.{ FlatSpec, Matchers }
-import pages.Page.{ Component, RouteContext }
+import pages.Page.{ Component, RouteContext, Routing }
 
 class PageSpec extends FlatSpec with Matchers {
   case class TestComponent(element: String = "Test Component") extends Component[String]
@@ -23,6 +23,20 @@ class PageSpec extends FlatSpec with Matchers {
     routing.apply("/unknown") should be(fallback)
     routing.apply("/page1") should be(TestComponent("1"))
     routing.apply("/page2") should be(TestComponent("2"))
+  }
+
+  it should "match routing with and without path params" in {
+    val pagesComponent = TestComponent("pages")
+    val pageComponent = TestComponent("page with id")
+    val fallback = TestComponent("fallback")
+
+    val routing: Routing[String] = Page.page[String]("/pages", ctx => pagesComponent)
+      .page("/page/:id", ctx => pageComponent)
+      .otherwise(_ => fallback)
+
+    routing.apply("/pages") should be(pagesComponent)
+    routing.apply("/page/1") should be(pageComponent)
+    routing.apply("/something") should be(fallback)
   }
 
   it should "throw an error if path does not match and no default defined" in {

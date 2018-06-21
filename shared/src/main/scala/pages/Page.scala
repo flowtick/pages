@@ -2,7 +2,7 @@ package pages
 
 object Page {
   trait Component[+E] {
-    val element: E
+    def element: E
     def init(): Unit = ()
   }
 
@@ -30,7 +30,7 @@ object Page {
           }.toMap)
 
       val queryParams: Map[String, String] = path.split(Array('?', '&')).toList match {
-        case (head :: tail) if tail.nonEmpty =>
+        case _ :: tail if tail.nonEmpty =>
           tail.flatMap(keyValue => {
             val split = keyValue.trim.split("=")
             val params = for {
@@ -62,15 +62,18 @@ object Page {
 
   def matchFragments(fullPath: String, template: String): Boolean = {
     val pathOnly = pathPart(fullPath)
-    val pathSplit = pathOnly.split("/")
-    val templateSplit = template.split("/")
+    val pathSplit = pathOnly.split("/").map(Option(_))
+    val templateSplit = template.split("/").map(Option(_))
 
-    def zippedPartMatchCount = pathSplit.zipAll(templateSplit, ".", ".").count {
-      case (pathPart, templatePart) if pathPart == templatePart || templatePart.startsWith(":") => true
-      case _ => false
+    def zipped: Array[(Option[String], Option[String])] = pathSplit.zipAll(templateSplit, None, None)
+
+    def allMatch: Boolean = zipped.forall {
+      case (Some(pathPart), Some(templatePart)) if pathPart == templatePart || templatePart.startsWith(":") => true
+      case (Some(pathPart), Some(templatePart)) if pathPart != templatePart => false
+      case (None, _) | (_, None) => false
     }
 
-    pathOnly == template || pathOnly.nonEmpty && template.nonEmpty && pathSplit.length == zippedPartMatchCount
+    pathOnly == template || pathOnly.nonEmpty && template.nonEmpty && allMatch
   }
 
   def page[E]: (String, RouteResolver[E]) => Routing[E] = apply
