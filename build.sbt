@@ -1,7 +1,7 @@
 import sbt.url
 import sbtrelease.ReleaseStateTransformations._
 
-val scalaV = "2.12.4"
+val scalaV = "2.12.6"
 
 scalacOptions += "-P:scalajs:sjsDefinedByDefault"
 
