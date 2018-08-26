@@ -10,10 +10,10 @@ class HtmlComponentSpec extends FlatSpec with Matchers {
 
     import pages.Page.page
 
-    val domView = new DomView[Elem](element => {
+    val domView = new DomView[Elem](component => {
       val appContainer = window.document.getElementById("body")
       appContainer.innerHTML = ""
-      mount(appContainer, element)
+      mount(appContainer, component.element)
     })
 
     page[Elem]("/page1", _ => HtmlComponent(<div>This is page 1</div>))

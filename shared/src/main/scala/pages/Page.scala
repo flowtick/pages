@@ -3,7 +3,6 @@ package pages
 object Page {
   trait Component[+E] {
     def element: E
-    def init(): Unit = ()
   }
 
   trait View[E] {
