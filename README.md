@@ -1,6 +1,8 @@
 pages
 =====
 
+**THIS PROJECT IS ABANDONED CONSIDER USING https://github.com/sparsetech/trail**
+
 [![Scala.js](https://img.shields.io/badge/scala.js-0.6.23%2B-blue.svg)](https://www.scala-js.org)
 [![travis](https://travis-ci.org/flowtick/pages.svg?branch=master)](https://travis-ci.org/flowtick/pages)
 [![latest release for 2.11](https://img.shields.io/maven-central/v/com.flowtick/pages_sjs0.6_2.11.svg?label=scala+2.11)](http://mvnrepository.com/artifact/com.flowtick/pages_2.11)
